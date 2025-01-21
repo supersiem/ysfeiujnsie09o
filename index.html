@@ -96,6 +96,8 @@
                     loggedIn = true;
                     terminal.innerHTML = '';
                     printToTerminal('----Login succesvol----');
+                    printToTerminal('----WAARSCHUWING SERVER ONSTABIEL----');
+
                 } else {
                     printToTerminal('Ongeldige inloggegevens.');
         printToTerminal('username:');
@@ -116,6 +118,9 @@
                 case 'info':
                     printToTerminal('aGV0IGVpbmRlIGtvbXQ=');
                     printToTerminal('base 64');
+                    break;
+                case 'appels-zijn-niet-giftig':
+                    printToTerminal("bm9nIGVlbiB3ZWVrIHdhY2h0ZW4gZGFuIGlzIGhldCB0aWpkLg==")
                     break;
                 default:
                     printToTerminal('not found');
