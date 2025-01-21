@@ -1,0 +1,129 @@
+<!-- Door Fred AI -->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpele Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: black;
+            color: green;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            font-size: large;
+        }
+        #terminal {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            cursor: text;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal" tabindex="0"></div>
+    
+    <script>
+        const terminal = document.getElementById('terminal');
+        let commandBuffer = '';
+        let loggedIn = false;
+        const correctUsername = 'admin';
+        const correctPassword = 'admin';
+        let loginStep = 0;
+        let inputUsername = '';
+        let inputPassword = '';
+
+        function printToTerminal(text) {
+            const line = document.createElement('div');
+            line.textContent = `> ${text}`;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function updateInputLine() {
+            if (!document.getElementById('input-line')) {
+                const inputLine = document.createElement('div');
+                inputLine.id = 'input-line';
+                inputLine.textContent = `> ${commandBuffer}`;
+                terminal.appendChild(inputLine);
+            } else {
+                document.getElementById('input-line').textContent = `> ${commandBuffer}`;
+            }
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            terminal.focus();
+            if (event.key === 'Enter') {
+                if (!loggedIn) {
+                    handleLogin();
+                } else {
+                    printToTerminal(commandBuffer);
+                    executeCommand(commandBuffer);
+                }
+                commandBuffer = '';
+            } else if (event.key === 'Backspace') {
+                commandBuffer = commandBuffer.slice(0, -1);
+                updateInputLine();
+            } else if (event.key.length === 1) {
+                commandBuffer += event.key;
+                updateInputLine();
+            }
+        });
+
+        function handleLogin() {
+            printToTerminal(document.getElementById('input-line').innerText.slice(2));
+            document.getElementById('input-line').remove();
+
+            if (loginStep === 0) {
+                inputUsername = commandBuffer;
+                printToTerminal('Voer wachtwoord in:');
+                loginStep++;
+            } else if (loginStep === 1) {
+                inputPassword = commandBuffer;
+                if (inputUsername === correctUsername && inputPassword === correctPassword) {
+                    loggedIn = true;
+                    terminal.innerHTML = '';
+                    printToTerminal('----Login succesvol----');
+                } else {
+                    printToTerminal('Ongeldige inloggegevens.');
+        printToTerminal('username:');
+                    loginStep = 0;
+                }
+            }
+        }
+
+        function executeCommand(command) {
+            document.getElementById('input-line').remove();
+            switch (command.toLowerCase()) {
+                case 'help':
+                    printToTerminal('\n- help\n- clear\n- info');
+                    break;
+                case 'clear':
+                    terminal.innerHTML = '';
+                    break;
+                case 'info':
+                    printToTerminal('aGV0IGVpbmRlIGtvbXQ=');
+                    printToTerminal('base 64');
+                    break;
+                default:
+                    printToTerminal('not found');
+            }
+        }
+        printToTerminal('---- server ----');
+
+        printToTerminal('username:');
+    </script>
+</body>
+</html>
