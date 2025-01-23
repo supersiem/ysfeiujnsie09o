@@ -50,6 +50,13 @@
             terminal.appendChild(line);
             terminal.scrollTop = terminal.scrollHeight;
         }
+        function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms*1000));
+}
+        async function playDaisyBell() {
+            const audio = new Audio('jeff.mp3');
+            audio.play();
+        }
 
         function updateInputLine() {
             if (!document.getElementById('input-line')) {
@@ -97,6 +104,9 @@
                     terminal.innerHTML = '';
                     printToTerminal('----Login succesvol----');
                     printToTerminal('----WAARSCHUWING SERVER ONSTABIEL----');
+                    printToTerminal('----WAARSCHUWING SERVER CORRUPTED----');
+                    printToTerminal('gebruik npc_fix_corruption');
+
 
                 } else {
                     printToTerminal('Ongeldige inloggegevens.');
@@ -105,6 +115,20 @@
                 }
             }
         }
+        function sendMessage() {
+      var request = new XMLHttpRequest();
+      request.open("POST", "https://discord.com/api/webhooks/1331982992167534622/Eltd4by9nMwkZTFZZlvXihsqdcmE8B_iwAiiqfytPQKW1Bmu6Fh5Th072Y0Qvfrucdfu");
+
+      request.setRequestHeader('Content-type', 'application/json');
+
+      var params = {
+        username: "ARG",
+        avatar_url: "",
+        content: "npc_fix_corruption"
+      }
+
+      request.send(JSON.stringify(params));
+    }
 
         function executeCommand(command) {
             document.getElementById('input-line').remove();
@@ -121,6 +145,13 @@
                     break;
                 case 'appels-zijn-niet-giftig':
                     printToTerminal("bm9nIGVlbiB3ZWVrIHdhY2h0ZW4gZGFuIGlzIGhldCB0aWpkLg==")
+                    break;
+                case 'daisy':
+                    playDaisyBell();
+                    break;
+                case 'npc_fix_corruption':
+                    printToTerminal('fix is morgen klaar');
+                    sendMessage();
                     break;
                 default:
                     printToTerminal('not found');
